@@ -114,8 +114,12 @@ public class Player : MonoBehaviour, IBlowable {
 		
 		//This should actually not be Space.World but Space.Paraglider, 
 		//since if in a turn, you should look horizontally relative to the glider.
-		transform.Rotate (0, Input.GetAxis ("mouseX") * Time.deltaTime * Reference.MOUSE_SENSITIVITY, 0, Space.World);
-	}
+		//transform.Rotate (0, Input.GetAxis ("mouseX") * Time.deltaTime * Reference.MOUSE_SENSITIVITY, 0, Space.World);
+        //Quaternion rot = GameObject.Find("Head").GetComponent<GvrHead>().rot;
+        //Debug.Log(Input.GetAxis("mouseX"));
+        //Debug.Log(rot.x*1000);
+        //transform.Rotate(0, rot.x * 100 * Time.deltaTime * Reference.MOUSE_SENSITIVITY, 0, Space.World);
+    }
 	
 	private void deployedControl(){
 		//Walk forward

@@ -32,6 +32,7 @@ using UnityEngine;
 /// the rotation is applied from where the positional offset is applied.  Use the
 /// #trackRotation and #trackPosition properties in this case.
 [AddComponentMenu("GoogleVR/GvrHead")]
+
 public class GvrHead : MonoBehaviour {
   /// Determines whether to apply the user's head rotation to this gameobject's
   /// orientation.  True means to update the gameobject's orientation with the
@@ -51,6 +52,8 @@ public class GvrHead : MonoBehaviour {
   /// fixed point of reference for the direction the user is looking.  Often, the
   /// grandparent or higher ancestor is a suitable target.
   public Transform target;
+
+    public Quaternion rot;
 
   /// Determines whether the head tracking is applied during `LateUpdate()` or
   /// `Update()`.  The default is false, which means it is applied during `LateUpdate()`
@@ -106,7 +109,7 @@ public class GvrHead : MonoBehaviour {
     GvrViewer.Instance.UpdateState();
 
     if (trackRotation) {
-      var rot = GvrViewer.Instance.HeadPose.Orientation;
+      rot = GvrViewer.Instance.HeadPose.Orientation;
       if (target == null) {
         transform.localRotation = rot;
       } else {
