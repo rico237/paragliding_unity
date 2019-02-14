@@ -14,7 +14,7 @@ public class VRAutoscript : MonoBehaviour {
     {
         controller = GetComponent<CharacterController>();
         gvrviewer = transform.GetChild(0).GetComponent<GvrViewer>();
-        vrHead = Camera.main.transform;
+        //vrHead = Camera.main.transform;
       
     }
 
