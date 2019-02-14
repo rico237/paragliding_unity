@@ -130,7 +130,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &207378005
 Transform:
   m_ObjectHideFlags: 0
@@ -235,7 +235,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 239516582}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 67a054dab23e3304d85158fbcffba186, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 5
@@ -911,6 +911,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2802811672257910428, guid: 44ccfa065ef5ce042bd6fbfe07cfeac0,
+        type: 3}
+      propertyPath: m_EnableTreeColliders
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 44ccfa065ef5ce042bd6fbfe07cfeac0, type: 3}
 --- !u!1 &1324654058
@@ -1350,7 +1355,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1798964362}
   - component: {fileID: 1798964364}
-  - component: {fileID: 1798964363}
+  - component: {fileID: 1798964365}
   m_Layer: 0
   m_Name: GvrMain
   m_TagString: Untagged
@@ -1374,20 +1379,6 @@ Transform:
   m_Father: {fileID: 1941884625}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1798964363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1798964361}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a31307a19dd844f45b4acfae04e62d97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 1941884625}
-  smoothing: 5
 --- !u!114 &1798964364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1408,6 +1399,18 @@ MonoBehaviour:
   screenSize: 0
   viewerType: 1
   stereoScreenScale: 1
+--- !u!114 &1798964365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798964361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c29cf09eaf77c848ad6804dcbc8b542, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1875419866 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4171845793866516700, guid: 44ccfa065ef5ce042bd6fbfe07cfeac0,
@@ -1576,6 +1579,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deployed: 0
   flying: 0
+  relativeVelocityAir: {x: 0, y: 0, z: 0}
 --- !u!136 &1941884622
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1583,11 +1587,11 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1941884620}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_Material: {fileID: 13400000, guid: 67a054dab23e3304d85158fbcffba186, type: 2}
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.7
-  m_Height: 1.75
+  m_Radius: 0.8
+  m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!143 &1941884623
@@ -1601,8 +1605,8 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 2
-  m_Radius: 0.5
+  m_Height: 1.75
+  m_Radius: 0.7
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -1618,7 +1622,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 80
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
@@ -1632,7 +1636,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1941884620}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1135.2382, y: 192.53528, z: 1632.5876}
+  m_LocalPosition: {x: 1137.65, y: 703.06, z: 2290.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 207378005}
@@ -1656,7 +1660,7 @@ HingeJoint:
   m_UseSpring: 1
   m_Spring:
     spring: 0
-    damper: 0
+    damper: 20
     targetPosition: 0
   m_UseMotor: 0
   m_Motor:

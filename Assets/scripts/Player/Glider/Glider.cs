@@ -76,14 +76,15 @@ public class Glider : MonoBehaviour, IBlowable{
 		brake();
 
 		if (Input.GetAxis ("speed") > 0) { //Cheap check to see if speeding is active
+            Debug.Log("FLA MOTHERFACKA");
 			speed ();
 		}
 	}
 
 	private Vector3 getLift(float relativeAirSpeed){
 
-		print ("Relative speed: " + relativeAirSpeed + " Actual speed: " + transform.InverseTransformDirection (body.velocity).z + " AoT: " + angleOfAttack + 
-			" Sink: " + body.velocity.y);
+		//print ("Relative speed: " + relativeAirSpeed + " Actual speed: " + transform.InverseTransformDirection (body.velocity).z + " AoT: " + angleOfAttack + 
+		//	" Sink: " + body.velocity.y);
 
 		//Lift formula ~ relativeVel^2 * angleOfAttack
 		//Angle of attack is faked here and should be affected only by braking or speeding
@@ -105,13 +106,18 @@ public class Glider : MonoBehaviour, IBlowable{
 	}
 
 	private void brake(){
+        //Debug.Log("lets brake");
+        //Debug.Log("brakeR: " + Input.GetAxis("brakeR"));
+        //Debug.Log("brakeL: " + Input.GetAxis("brakeL"));
 
-		//The drag gained when braking (pulling down small part of glider)
-		Vector3 brakeDrag = Math.getDrag (body.velocity - wind.GetVelocity(this), Reference.DRAG_COEFFICIENT_UNDER, Reference.AIR_DENSITY_20, 
+        //The drag gained when braking (pulling down small part of glider)
+        Vector3 brakeDrag = Math.getDrag (body.velocity - wind.GetVelocity(this), Reference.DRAG_COEFFICIENT_UNDER, Reference.AIR_DENSITY_20, 
 			               Reference.AREA_BRAKE);
 
-		Vector3 brakeRightPos = transform.TransformPoint (Vector3.right * 4 + Vector3.back);
-		Vector3 brakeLeftPos = transform.TransformPoint (Vector3.left * 4 + Vector3.back);
+        //Debug.Log("Brake drag: " + brakeDrag);
+
+		Vector3 brakeRightPos = transform.TransformPoint (Vector3.right * 12 + Vector3.back);
+		Vector3 brakeLeftPos = transform.TransformPoint (Vector3.left * 12 + Vector3.back);
 
 		body.AddForceAtPosition (brakeDrag*Input.GetAxis("brakeR"), brakeRightPos);
 		body.AddForceAtPosition (brakeDrag*Input.GetAxis("brakeL"), brakeLeftPos);

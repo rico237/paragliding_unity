@@ -11,8 +11,7 @@ public class Player : MonoBehaviour, IBlowable {
 	private Rigidbody flyingBody;
 	private CapsuleCollider flyingCollider;
 	private Quaternion startRotation;
-	private AudioSource windSound;
-	private Vector3 relativeVelocityAir;
+	public Vector3 relativeVelocityAir;
 
 	private const float maxWindVelocity = 20;
 
@@ -40,21 +39,20 @@ public class Player : MonoBehaviour, IBlowable {
 
 	void FixedUpdate () {
 		playerControl ();
-		viewControl ();
-		//print ("Vario: " + flyingBody.velocity.y + " Speed: " 
-		  //     + new Vector2(flyingBody.velocity.x, flyingBody.velocity.z).magnitude);
 	}
 
 	void OnTriggerEnter(Collider collider){ //When hitting ground
 		if (collider.gameObject.name == "Terrain") {
 			setFlying (false);
+            Debug.Log("not flying");
 		}
 	}
 
 	void OnTriggerExit(Collider collider){ //When leaving ground
 		if (collider.gameObject.name == "Terrain" && deployed) {
 			setFlying (true);
-		}
+            Debug.Log("flying");
+        }
 	}
 	public bool getDeployed(){
 		return deployed;
@@ -165,15 +163,4 @@ public class Player : MonoBehaviour, IBlowable {
 		flyingBody.useGravity = deployed;
 		flyingBody.isKinematic = !deployed;
 	}
-	
-	private void viewControl(){
-		if (Input.GetKeyUp (KeyCode.V) && deployed) { //If v is pressed, change camera
-			
-			GameObject fpvCamera = transform.Find ("FpvCamera").gameObject;
-			GameObject thirdPvCamera = transform.Find ("ThirdViewCamera").gameObject;
-			fpvCamera.SetActive(!fpvCamera.activeSelf);
-			thirdPvCamera.SetActive(!thirdPvCamera.activeSelf);
-		}
-	}
-
 }
