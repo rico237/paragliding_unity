@@ -13,7 +13,6 @@ public class WindZoneV2 : MonoBehaviour {
         CharacterController obj = other.gameObject.GetComponent<CharacterController>();
         if(obj != null)
         {
-            Debug.Log("Salut");
             rigidbodies.Add(obj);
         }
     }
@@ -23,7 +22,6 @@ public class WindZoneV2 : MonoBehaviour {
         CharacterController obj = other.gameObject.GetComponent<CharacterController>();
         if (obj != null)
         {
-            Debug.Log("a plus");
             rigidbodies.Remove(obj);
         }
     }
