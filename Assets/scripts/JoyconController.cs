@@ -168,6 +168,20 @@ public class JoyconController : MonoBehaviour
         data["accel_magnitude"] = joycon.GetAccel().magnitude.ToString();
         data["orientation"] = orientation.x + "," + orientation.y + "," + orientation.z + "," + orientation.w;
         data["rotation"] = WriteVectorProperly(rotation);
+
+        if (joycon.GetButton(Joycon.Button.SHOULDER_1))
+        {
+            data["pushed_buttons"] = "SHOULDER_1";
+        }
+        else if (joycon.GetButton(Joycon.Button.SHOULDER_2))
+        {
+            data["pushed_buttons"] = "SHOULDER_2";
+        }
+        else
+        {
+            data["pushed_buttons"] = "";
+        }
+
         return data;
     }
 
