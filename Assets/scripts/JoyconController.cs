@@ -60,25 +60,18 @@ public class JoyconController : MonoBehaviour
             // Bouton shoulder appuye
             if (joycon.GetButton(Joycon.Button.SHOULDER_1))
             {
-                //Debug.Log("orientationX " + (rightOrientationX - rotation.x));
                 float borne_inf_magnitude = 1 - (borne_sup_magnitude - 1);
 
                 // Assez de magnitude sur l'accelerometre pour considerer un mouvement
                 if (magnitude < borne_inf_magnitude || magnitude > borne_sup_magnitude)
                 {
-                    // joycon droit
                     if (accelero.y > borne_monte || accelero.y < borne_descente)
                     {
-                        //Debug.Log("Monte : " + accelero);
-                        //gameObject.transform.position = new Vector3(position.x, position.y - magnitude / 2, position.z);
-                        //gameObject.transform.position = newGameObjectPosition;
-                        //gameObject.transform.rotation = orientation;
-
+                        //Debug.Log("Acceleration : " + accelero);
                         if (rotation.x >= 0 && rotation.x <= 90)
                         {
                             // Gauche pour Joy droite & inverssement
                             //Debug.Log("Gauche");
-
                             if (!joycon.isLeft)
                             {
                                 rightJoyconDirectionState = Direction.Gauche;
@@ -91,7 +84,6 @@ public class JoyconController : MonoBehaviour
                         else if (rotation.x <= 360 && rotation.x >= 270)
                         {
                             //Debug.Log("Droite");
-
                             if (!joycon.isLeft)
                             {
                                 rightJoyconDirectionState = Direction.Droite;
@@ -102,43 +94,33 @@ public class JoyconController : MonoBehaviour
                             }
                         }
                         else
-                        { leftJoyconDirectionState = Direction.Arret; rightJoyconDirectionState = Direction.Arret; }
-
-
+                            leftJoyconDirectionState = Direction.Arret; rightJoyconDirectionState = Direction.Arret;
                     }
                     else
-                    { leftJoyconDirectionState = Direction.Arret; rightJoyconDirectionState = Direction.Arret; }
+                        leftJoyconDirectionState = Direction.Arret; rightJoyconDirectionState = Direction.Arret; 
                 }
-                else { leftJoyconDirectionState = Direction.Arret; rightJoyconDirectionState = Direction.Arret; }
+                else  
+                    leftJoyconDirectionState = Direction.Arret; rightJoyconDirectionState = Direction.Arret;
             }
-            else { leftJoyconDirectionState = Direction.Arret; rightJoyconDirectionState = Direction.Arret; }
+            else 
+                leftJoyconDirectionState = Direction.Arret; rightJoyconDirectionState = Direction.Arret;
         }
     }
 
     void SendJoyconsData()
     {
-
         if (joycons.Count != 0)
         {
             foreach (Joycon joycon in joycons)
             {
                 if (joycon != null)
                 {
-                    if (joycon.isLeft)
-                    {
-                        socket.Emit("JOYCON_UPDATE_LEFT", new JSONObject(GetDictionnaryFromJoycon(joycon)));
-                    }
-                    else
-                    {
-                        socket.Emit("JOYCON_UPDATE_RIGHT", new JSONObject(GetDictionnaryFromJoycon(joycon)));
-                    }
+                    if (joycon.isLeft) socket.Emit("JOYCON_UPDATE_LEFT", new JSONObject(GetDictionnaryFromJoycon(joycon)));
+                    else socket.Emit("JOYCON_UPDATE_RIGHT", new JSONObject(GetDictionnaryFromJoycon(joycon)));
                 }
             }
         }
-        else
-        {
-            Debug.Log("No joycons connected");
-        }
+        else Debug.Log("PB avec les joycons (0 found)");
     }
 
     private Dictionary<string, string> GetDictionnaryFromJoycon(Joycon joycon)
@@ -209,13 +191,11 @@ public class JoyconController : MonoBehaviour
                     {
                         // Joycon gauche
                         leftOrientationX = rotation.x;
-                        //gameObject.transform.position = new Vector3((float)2.421276, (float)-0.1984076, (float)-1.163957);   
                     }
                     else
                     {
                         // Joycon droit
                         rightOrientationX = rotation.x;
-                        //gameObject.transform.position = new Vector3((float)0.84, (float)-0.1984076, (float)-0.09);
                     }
                 }
 
@@ -259,12 +239,10 @@ public class JoyconController : MonoBehaviour
                     newGameObjectPosition = new Vector3(position.x - coeffAcceleration, position.y, position.z);
                 }
 
-                //TODO: Send joycons data
                 SendJoyconsData();
 
                 gameObject.transform.position = newGameObjectPosition;
                 //gameObject.transform.rotation = orientation;
-
             }
         }
     }
