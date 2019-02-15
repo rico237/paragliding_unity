@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SocketIO;
 
 public class JoyconController : MonoBehaviour
 {
-
+    public SocketIOComponent socket;
     // Calibrer les valeures de la magnitude pour detecter le mouvement
     public float borne_sup_magnitude = (float)1.018;
 
@@ -114,6 +115,67 @@ public class JoyconController : MonoBehaviour
         }
     }
 
+    void SendJoyconsData()
+    {
+
+        if (joycons.Count != 0)
+        {
+            foreach (Joycon joycon in joycons)
+            {
+                if (joycon != null)
+                {
+                    if (joycon.isLeft)
+                    {
+                        socket.Emit("JOYCON_UPDATE_LEFT", new JSONObject(GetDictionnaryFromJoycon(joycon)));
+                    }
+                    else
+                    {
+                        socket.Emit("JOYCON_UPDATE_RIGHT", new JSONObject(GetDictionnaryFromJoycon(joycon)));
+                    }
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("No joycons connected");
+        }
+    }
+
+    private Dictionary<string, string> GetDictionnaryFromJoycon(Joycon joycon)
+    {
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        if (joycon.isLeft)
+        {
+            data["type"] = "Left";
+        }
+        else
+        {
+            data["type"] = "Right";
+        }
+
+        Quaternion orientation = joycon.GetVector();
+        orientation = new Quaternion(orientation.x, orientation.z, orientation.y, orientation.w);
+        Quaternion quat = Quaternion.Inverse(orientation);
+        Vector3 rot = quat.eulerAngles;
+        Vector3 rotationOffset = new Vector3(0, 180, 0);
+        rot += rotationOffset;
+        orientation = Quaternion.Euler(rot);
+        Vector3 rotation = orientation.eulerAngles;
+
+        data["gyro"] = WriteVectorProperly(joycon.GetGyro());
+        data["gyro_magnitude"] = joycon.GetGyro().magnitude.ToString();
+        data["accel"] = WriteVectorProperly(joycon.GetAccel()); ;
+        data["accel_magnitude"] = joycon.GetAccel().magnitude.ToString();
+        data["orientation"] = orientation.x + "," + orientation.y + "," + orientation.z + "," + orientation.w;
+        data["rotation"] = WriteVectorProperly(rotation);
+        return data;
+    }
+
+    private string WriteVectorProperly(Vector3 theV)
+    {
+        return theV.x + "," + theV.y + "," + theV.z;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -182,6 +244,9 @@ public class JoyconController : MonoBehaviour
                 {
                     newGameObjectPosition = new Vector3(position.x - coeffAcceleration, position.y, position.z);
                 }
+
+                //TODO: Send joycons data
+                SendJoyconsData();
 
                 gameObject.transform.position = newGameObjectPosition;
                 //gameObject.transform.rotation = orientation;

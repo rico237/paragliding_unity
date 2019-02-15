@@ -13,6 +13,8 @@ public class Player : MonoBehaviour, IBlowable {
 	private Quaternion startRotation;
 	public Vector3 relativeVelocityAir;
 
+    public string playerName;
+
 	private const float maxWindVelocity = 20;
 
 	// Use this for initialization
@@ -21,6 +23,7 @@ public class Player : MonoBehaviour, IBlowable {
 		flyingBody = GetComponent<Rigidbody> ();
 		startRotation = flyingBody.rotation;
 		Reference.blowables.Add(this);
+        this.name = playerName;
 
 		//Turn of the cursor while in fps
 		Cursor.visible = false;
