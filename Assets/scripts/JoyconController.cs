@@ -55,6 +55,45 @@ public class JoyconController : MonoBehaviour
         {
             float magnitude = joycon.GetAccel().magnitude;
             Vector3 accelero = joycon.GetAccel();
+            //Debug.Log(accelero);
+
+            Quaternion orientation = joycon.GetVector();
+            orientation = new Quaternion(orientation.x, orientation.z, orientation.y, orientation.w);
+
+            Vector3 lastPosition = new Vector3(0, (float)-1.0);
+
+            if (joycon.isLeft)
+            {
+                if (orientation.y >= -0.3 && orientation.y <= 0.3)//joycon face vers le haut
+                {
+                }
+            }
+            else
+            {
+                Debug.Log("right: " + orientation);
+
+                if (orientation.x >= -0.3 && orientation.x <= 0.3)//joycon face vers le haut
+                {
+                }
+            }
+
+        }
+
+    }
+
+    /*private void SetJoyconState()
+    {
+        foreach (Joycon joycon in joycons)
+        {
+            float magnitude = joycon.GetAccel().magnitude;
+            Vector3 accelero = joycon.GetAccel();
+            //Debug.Log(accelero);
+
+            Quaternion orientation = joycon.GetVector();
+            orientation = new Quaternion(orientation.x, orientation.z, orientation.y, orientation.w);
+            Debug.Log(orientation);
+            
+
             Vector3 lastPosition = new Vector3(0, (float)-1.0);
 
             // Bouton shoulder appuye
@@ -105,7 +144,10 @@ public class JoyconController : MonoBehaviour
             else 
                 leftJoyconDirectionState = Direction.Arret; rightJoyconDirectionState = Direction.Arret;
         }
-    }
+    }*/
+
+
+
 
     void SendJoyconsData()
     {
@@ -164,6 +206,31 @@ public class JoyconController : MonoBehaviour
             data["pushed_buttons"] = "";
         }
 
+        if (joycon.isLeft)
+        {
+            //Debug.Log("left: " + orientation);
+            if (orientation.y >= -0.3 && orientation.y <= 0.3)//joycon face vers le haut
+            {
+                data["isUp"] = "true";
+            }
+            else
+            {
+                data["isUp"] = "false";
+            }
+        }
+        else
+        {
+            //Debug.Log("right: " + orientation);
+            if (orientation.x >= -0.3 && orientation.x <= 0.3)//joycon face vers le haut
+            {
+                data["isUp"] = "true";
+            }
+            else
+            {
+                data["isUp"] = "false";
+            }
+        }
+
         return data;
     }
 
@@ -218,31 +285,9 @@ public class JoyconController : MonoBehaviour
                 orientation = Quaternion.Euler(rot);
                 rotation = orientation.eulerAngles;
 
-                //Debug.LogWarning("Gyro : " + gyro.ToString());
-                //Debug.LogWarning("Magnitude G : " + gyroMagnitude.ToString());
-                //Debug.LogWarning("Accel : " + accel.ToString());
-                //Debug.LogWarning("Magnitude A: " + accelMagnitude.ToString());
 
-
-                // Doit être placé sous la position
-                SetJoyconState();
-
-                position = gameObject.transform.position;
-                Vector3 newGameObjectPosition = new Vector3(position.x, position.y, position.z);
-
-                if (rightJoyconDirectionState == Direction.Droite)
-                {
-                    newGameObjectPosition = new Vector3(position.x + coeffAcceleration, position.y, position.z);
-                }
-                else if (rightJoyconDirectionState == Direction.Gauche)
-                {
-                    newGameObjectPosition = new Vector3(position.x - coeffAcceleration, position.y, position.z);
-                }
 
                 SendJoyconsData();
-
-                gameObject.transform.position = newGameObjectPosition;
-                //gameObject.transform.rotation = orientation;
             }
         }
     }

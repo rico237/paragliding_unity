@@ -178,6 +178,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 904819557, guid: 7d0a5a414b7b7c04da44173f53308684, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d0a5a414b7b7c04da44173f53308684, type: 3}
 --- !u!1 &207378004
@@ -456,6 +460,18 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &351346638 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1716303805136288619, guid: 7d0a5a414b7b7c04da44173f53308684,
+    type: 3}
+  m_PrefabInstance: {fileID: 155283757}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 961346d7e16a445ff93777573e78efd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &418376695
 GameObject:
   m_ObjectHideFlags: 0
@@ -1837,7 +1853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53682946092e290489b5f50837062981, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  socket: {fileID: 0}
+  socket: {fileID: 351346638}
   player: {fileID: 1941884620}
   controller: {fileID: 1941884623}
 --- !u!114 &1941884629
@@ -1852,7 +1868,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fd073a11441c5e4aab9b88607678830, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  socket: {fileID: 0}
+  socket: {fileID: 351346638}
   borne_sup_magnitude: 1.018
   coeffAcceleration: 0.07
   borne_monte: -1.02

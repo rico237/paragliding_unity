@@ -122,11 +122,29 @@ public class Glider : MonoBehaviour, IBlowable{
 		body.AddForceAtPosition (brakeDrag*Input.GetAxis("brakeR"), brakeRightPos);
 		body.AddForceAtPosition (brakeDrag*Input.GetAxis("brakeL"), brakeLeftPos);
 
+        Debug.Log(Input.GetAxis("brakeR"));
+
 		//An experiment in increasing AoT when braking.
 		angleOfAttack = originAngleOfAttack + (Input.GetAxis("brakeR") + Input.GetAxis("brakeL"))*8;
 	}
 
-	private void pushBack(){
+    public void applyForceLeft(float power) {
+        Vector3 brakeDrag = Math.getDrag(body.velocity - wind.GetVelocity(this), Reference.DRAG_COEFFICIENT_UNDER, Reference.AIR_DENSITY_20,
+                   Reference.AREA_BRAKE);
+        Vector3 brakeLeftPos = transform.TransformPoint(Vector3.left * 12 + Vector3.back);
+        body.AddForceAtPosition(brakeDrag * power, brakeLeftPos);
+    }
+
+    public void applyForceRight(float power)
+    {
+        Vector3 brakeDrag = Math.getDrag(body.velocity - wind.GetVelocity(this), Reference.DRAG_COEFFICIENT_UNDER, Reference.AIR_DENSITY_20,
+           Reference.AREA_BRAKE);
+        Vector3 brakeRightPos = transform.TransformPoint(Vector3.right * 12 + Vector3.back);
+        body.AddForceAtPosition(brakeDrag * power, brakeRightPos);
+    }
+
+
+    private void pushBack(){
 		//A cheap and hopefully temporary solution for placing glider behind player when deploying
 		if (Input.GetKeyDown (KeyCode.Space) && !player.getDeployed()) {
 			body.useGravity = false;

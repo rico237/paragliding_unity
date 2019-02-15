@@ -11,6 +11,8 @@ public class Communication : MonoBehaviour
     public UnityEngine.CharacterController controller;
     private JoyconManager joyconManager;
     List<Joycon> joycons;
+    public float rotationLeft = 0;
+    public float rotationRight = 0;
 
     // Use this for initialization
     void Start()
@@ -53,7 +55,31 @@ public class Communication : MonoBehaviour
 
     private void OnJoyconUpdate(SocketIOEvent evt)
     {
-        Debug.Log("On joycon update unity with data : " + evt.data);
+        Glider glider = GameObject.Find("Glider").GetComponent<Glider>();
+
+        if (evt.data.GetField("type").str == "Left")
+        {
+            if (evt.data.GetField("isUp").str == "true")
+            {
+                print("JOY CON LEFT UP");
+                rotationLeft += 0.005f * Time.deltaTime;
+                glider.applyForceLeft(rotationLeft);
+
+            }
+            else rotationLeft = 0;
+        }
+
+        if (evt.data.GetField("type").str == "Right")
+        {
+            if (evt.data.GetField("isUp").str == "true")
+            {
+                print("JOY CON RIGHT UP");
+                rotationRight += 0.005f * Time.deltaTime;
+                glider.applyForceRight(rotationRight);
+            }
+            else rotationRight = 0;
+        }
+        //Debug.Log("On joycon update unity with data : " + evt.data);
     }
 
     private void OnUserConnected(SocketIOEvent evt)
