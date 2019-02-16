@@ -7,7 +7,7 @@ using System.Collections.Generic;
 // Also the GameOject can be moved forward/backward and left/right.
 // Add a Quad to the scene so this GameObject can collider with a floor.
 
-public class controller : MonoBehaviour
+public class Controller : MonoBehaviour
 {
     public float speed = 6.0f;
     public float jumpSpeed = 8.0f;
@@ -39,7 +39,7 @@ public class controller : MonoBehaviour
         velocity = ((transform.position - previous).magnitude) / Time.deltaTime;
         previous = transform.position;
 
-        if (joycons.Count != 0)
+        if (joycons != null || joycons.Count != 0)
         {
             foreach (Joycon joycon in joycons)
             {
@@ -68,6 +68,7 @@ public class controller : MonoBehaviour
 
                         if (Input.GetButton("Jump"))
                         {
+                            Debug.Log("JUMPE");
                             moveDirection.y = jumpSpeed;
                         }
 
@@ -96,6 +97,7 @@ public class controller : MonoBehaviour
 
                 if (Input.GetButton("Jump"))
                 {
+                    Debug.Log("JUMPE");
                     moveDirection.y = jumpSpeed;
                 }
 

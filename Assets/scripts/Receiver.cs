@@ -1,59 +1,78 @@
-using Newtonsoft.Json.Linq;
 using SocketIO;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 public class Receiver : MonoBehaviour
 {
 
-  public SocketIOComponent socket;
-  private float position_x = 111.9f;
-  private float position_y = 620f;
-  private float position_z = 800f;
-  public GameObject map;
+    public SocketIOComponent socket;
+    public GameObject map;
+    public GameObject plyer;
 
-  // Use this for initialization
-  void Start()
-  {
-    Physics.IgnoreCollision(this.gameObject.GetComponent<Collider>(),map.GetComponent<Collider>());
+    private float position_x = 111.9f;
+    private float position_y = 620f;
+    private float position_z = 800f;
 
 
-    GameObject go = GameObject.Find("SocketIO");
-    socket = go.GetComponent<SocketIOComponent>();
-    Thread.Sleep(5000);
-
-    socket.On("receiveposition", (SocketIOEvent e) =>
+    // Use this for initialization
+    void Start()
     {
-          //Debug.Log(string.Format("[name: {0}, data: {1}]", e.name, e.data));
-          position_x = float.Parse(e.data[0].ToString());
-          position_y = float.Parse(e.data[1].ToString());
-          position_z = float.Parse(e.data[2].ToString());
-    });
 
-  }
+        if(plyer == null)
+        {
+            plyer = GameObject.FindWithTag("playa").GetComponent<GameObject>();
+        }
 
-  public void TestBoop(SocketIOEvent e)
-  {
-    Debug.Log(string.Format("[name: {0}, data: {1}]", e.name, e.data));
-  }
+        //Physics.IgnoreCollision(plyer.GetComponent<Collider>(), map.GetComponent<Collider>());
 
-  // Update is called once per frame
-  void Update()
-  {
-    Thread.Sleep(30);
-    socket.Emit("getposition", "I want to get the new position");
-    Move();
-  }
+        if (socket == null)
+        {
+            socket = GameObject.Find("SocketIO").GetComponent<SocketIOComponent>();
+        }
 
-  private void Move()
-  {
-    Vector3 position = new Vector3(position_x, position_y, position_z);
-    this.gameObject.transform.position = position;
-    //Debug.Log(this.gameObject.transform.position);
-  }
 
+
+        StartCoroutine(ConnectToServer());
+
+        socket.On("UPDATE_CAMERA", OnCameraUpdate);
+        socket.On("USER_CONNECTED", OnConnect);
+    }
+    // Update is called once per frame
+    void Update() { }
+
+    private void OnConnect(SocketIOEvent e)
+    {
+        Debug.Log("User connect with id : "+ e.data["id"]);
+    }
+
+    private void OnCameraUpdate (SocketIOEvent e)
+    {
+        Debug.Log(e.data);
+        position_x = float.Parse(e.data["x"].ToString());
+        position_y = float.Parse(e.data["y"].ToString());
+        position_z = float.Parse(e.data["z"].ToString());
+
+
+        Vector3 position = new Vector3(position_x, position_y, position_z);
+        gameObject.transform.position = position;
+    }
+
+    private IEnumerator ConnectToServer()
+    {
+        //yield return new WaitForSeconds(0.5f);
+        socket.Emit("USER_CONNECT");
+
+        // wait 1 seconds and continue
+        //yield return new WaitForSeconds(1f);
+
+        //Dictionary<string, string> data = new Dictionary<string, string>();
+        //data["name"] = "Rico";
+        //Vector3 position = gameObject.transform.position;
+        //data["position"] = position.x + "," + position.y + "," + position.z;
+        //socket.Emit("PLAY", new JSONObject(data));
+
+        // wait ONE FRAME and continue
+        yield return null;
+    }
 
 }

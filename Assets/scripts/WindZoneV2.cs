@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WindZoneV2 : MonoBehaviour {
-    public List<controller> rigidbodies = new List<controller>();
+    public List<Controller> rigidbodies = new List<Controller>();
     public Vector3 windDirection = Vector3.right;
     public float windStrenght = 5;
 
 
     private void OnTriggerEnter(Collider other)
     {
-        controller obj = other.gameObject.GetComponent<controller>();
+        Controller obj = other.gameObject.GetComponent<Controller>();
         if(obj != null)
         {
             Debug.Log("Salut");
@@ -20,7 +20,7 @@ public class WindZoneV2 : MonoBehaviour {
 
     private void OnTriggerExit(Collider other)
     {
-        controller obj = other.gameObject.GetComponent<controller>();
+        Controller obj = other.gameObject.GetComponent<Controller>();
         if (obj != null)
         {
             Debug.Log("a plus");
@@ -30,7 +30,7 @@ public class WindZoneV2 : MonoBehaviour {
 
     private void FixedUpdate()
     {
-        foreach (controller elem in rigidbodies)
+        foreach (Controller elem in rigidbodies)
         {
             //elem.controller.Move(elem.moveDirection + (windDirection * windStrenght * Time.deltaTime));
             elem.moveDirection = elem.moveDirection + (windDirection * windStrenght * Time.deltaTime);

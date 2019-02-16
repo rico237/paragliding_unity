@@ -47,10 +47,6 @@ public class Communication : MonoBehaviour
         socket.On("JOYCON_UPDATE_LEFT", OnJoyconUpdate);
         socket.On("JOYCON_UPDATE_RIGHT", OnJoyconUpdate);
 
-        socket.On("TEST", (SocketIOEvent e) => {
-            Debug.Log(string.Format("[name: {0}, data: {1}]", e.name, e.data));
-        });
-
     }
 
     private void OnJoyconUpdate(SocketIOEvent evt)

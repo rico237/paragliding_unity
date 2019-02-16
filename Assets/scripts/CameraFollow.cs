@@ -4,23 +4,19 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour {
 
-    public Transform target;
+    public Transform playerTransform;
     public float smoothing = 5f;
-    Vector3 offset;
+    private Vector3 offset;
 
-	// Use this for initialization
-	void Start () {
-        offset = transform.position - target.position;
-	}
-	
-	// Update is called once per frame
-	void FixedUpdate () {
-        Vector3 targetCamPos = target.position + offset;
-        transform.position = Vector3.Lerp(transform.position, targetCamPos, smoothing * Time.deltaTime);
-	}
-
-    private void Update()
+	void Start () 
     {
-        Debug.Log(Input.deviceOrientation.ToString());
+        offset = transform.position - playerTransform.position;
+	}
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        Vector3 targetCamPos = playerTransform.position + offset;
+        transform.position = Vector3.Lerp(transform.position, targetCamPos, smoothing * Time.deltaTime);
     }
 }
