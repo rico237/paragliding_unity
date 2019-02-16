@@ -21,6 +21,6 @@ public class CameraFollow : MonoBehaviour {
 
     private void Update()
     {
-        //Debug.Log(Input.deviceOrientation.ToString());
+        Debug.Log(Input.deviceOrientation.ToString());
     }
 }
