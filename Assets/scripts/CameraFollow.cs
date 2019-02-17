@@ -8,13 +8,13 @@ public class CameraFollow : MonoBehaviour {
     public float smoothing = 5f;
     private Vector3 offset;
 
-	void Start () 
+    private void Start () 
     {
         offset = transform.position - playerTransform.position;
 	}
 
     // Update is called once per frame
-    void FixedUpdate()
+    private void Update()
     {
         Vector3 targetCamPos = playerTransform.position + offset;
         transform.position = Vector3.Lerp(transform.position, targetCamPos, smoothing * Time.deltaTime);
