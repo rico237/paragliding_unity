@@ -7,13 +7,13 @@ public class JoyconController : MonoBehaviour
 {
     public SocketIOComponent socket;
     // Calibrer les valeures de la magnitude pour detecter le mouvement
-    public float borne_sup_magnitude = (float)1.018;
+    public float borne_sup_magnitude = 1.018f;
 
-    public float coeffAcceleration = (float)0.07;
+    public float coeffAcceleration = 0.07f;
 
     // Calibrer les valeur de monté et descente pour detecter la monté et descente
-    public float borne_monte = (float)-1.02;
-    public float borne_descente = (float)-0.08;
+    public float borne_monte = -1.02f;
+    public float borne_descente = -0.08f;
 
     public JoyconManager.JoyconType joyconType;
     private float leftOrientationX;
@@ -25,6 +25,7 @@ public class JoyconController : MonoBehaviour
 
     public Vector3 accel = Vector3.zero;
     public float accelMagnitude;
+
     public Quaternion orientation;
     public Vector3 rotation;
     //public Joycon joycon;
@@ -34,8 +35,6 @@ public class JoyconController : MonoBehaviour
 
     private Direction rightJoyconDirectionState;
     private Direction leftJoyconDirectionState;
-
-    private Vector3 position;
 
     JoyconManager joyconManager;
     List<Joycon> joycons;
@@ -48,106 +47,6 @@ public class JoyconController : MonoBehaviour
         // get the public Joycon array attached to the JoyconManager in scene
         joycons = JoyconManager.Instance.j;
     }
-
-    private void SetJoyconState()
-    {
-        foreach (Joycon joycon in joycons)
-        {
-            float magnitude = joycon.GetAccel().magnitude;
-            Vector3 accelero = joycon.GetAccel();
-            //Debug.Log(accelero);
-
-            Quaternion orientation = joycon.GetVector();
-            orientation = new Quaternion(orientation.x, orientation.z, orientation.y, orientation.w);
-
-            Vector3 lastPosition = new Vector3(0, (float)-1.0);
-
-            if (joycon.isLeft)
-            {
-                if (orientation.y >= -0.3 && orientation.y <= 0.3)//joycon face vers le haut
-                {
-                }
-            }
-            else
-            {
-                Debug.Log("right: " + orientation);
-
-                if (orientation.x >= -0.3 && orientation.x <= 0.3)//joycon face vers le haut
-                {
-                }
-            }
-
-        }
-
-    }
-
-    /*private void SetJoyconState()
-    {
-        foreach (Joycon joycon in joycons)
-        {
-            float magnitude = joycon.GetAccel().magnitude;
-            Vector3 accelero = joycon.GetAccel();
-            //Debug.Log(accelero);
-
-            Quaternion orientation = joycon.GetVector();
-            orientation = new Quaternion(orientation.x, orientation.z, orientation.y, orientation.w);
-            Debug.Log(orientation);
-            
-
-            Vector3 lastPosition = new Vector3(0, (float)-1.0);
-
-            // Bouton shoulder appuye
-            if (joycon.GetButton(Joycon.Button.SHOULDER_1))
-            {
-                float borne_inf_magnitude = 1 - (borne_sup_magnitude - 1);
-
-                // Assez de magnitude sur l'accelerometre pour considerer un mouvement
-                if (magnitude < borne_inf_magnitude || magnitude > borne_sup_magnitude)
-                {
-                    if (accelero.y > borne_monte || accelero.y < borne_descente)
-                    {
-                        //Debug.Log("Acceleration : " + accelero);
-                        if (rotation.x >= 0 && rotation.x <= 90)
-                        {
-                            // Gauche pour Joy droite & inverssement
-                            //Debug.Log("Gauche");
-                            if (!joycon.isLeft)
-                            {
-                                rightJoyconDirectionState = Direction.Gauche;
-                            }
-                            else
-                            {
-                                leftJoyconDirectionState = Direction.Droite;
-                            }
-                        }
-                        else if (rotation.x <= 360 && rotation.x >= 270)
-                        {
-                            //Debug.Log("Droite");
-                            if (!joycon.isLeft)
-                            {
-                                rightJoyconDirectionState = Direction.Droite;
-                            }
-                            else
-                            {
-                                leftJoyconDirectionState = Direction.Gauche;
-                            }
-                        }
-                        else
-                            leftJoyconDirectionState = Direction.Arret; rightJoyconDirectionState = Direction.Arret;
-                    }
-                    else
-                        leftJoyconDirectionState = Direction.Arret; rightJoyconDirectionState = Direction.Arret; 
-                }
-                else  
-                    leftJoyconDirectionState = Direction.Arret; rightJoyconDirectionState = Direction.Arret;
-            }
-            else 
-                leftJoyconDirectionState = Direction.Arret; rightJoyconDirectionState = Direction.Arret;
-        }
-    }*/
-
-
-
 
     void SendJoyconsData()
     {
@@ -253,17 +152,6 @@ public class JoyconController : MonoBehaviour
                 {
                     // Joycon has no magnetometer, so it cannot accurately determine its yaw value. Joycon.Recenter allows the user to reset the yaw value.
                     joycon.Recenter();
-
-                    if (joycon.isLeft)
-                    {
-                        // Joycon gauche
-                        leftOrientationX = rotation.x;
-                    }
-                    else
-                    {
-                        // Joycon droit
-                        rightOrientationX = rotation.x;
-                    }
                 }
 
                 //stick = joycon.GetStick();

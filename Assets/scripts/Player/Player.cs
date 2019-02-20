@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using SocketIO;
 
 public class Player : MonoBehaviour, IBlowable {
 
@@ -8,10 +9,14 @@ public class Player : MonoBehaviour, IBlowable {
 	private float speed = 6;
 	public bool deployed;
 	public bool flying;
-	private Rigidbody flyingBody;
+    private SocketIOComponent socket;
+    private Rigidbody flyingBody;
 	private CapsuleCollider flyingCollider;
 	private Quaternion startRotation;
 	public Vector3 relativeVelocityAir;
+
+    Vector3 oldPosition, currentPosition;
+    Quaternion oldRotation, currentRotation;
 
     public string playerName;
 
@@ -19,14 +24,19 @@ public class Player : MonoBehaviour, IBlowable {
 
 	// Use this for initialization
 	void Start () {
-		controller = GetComponent<CharacterController> ();
+        if (socket == null) { socket = GameObject.Find("SocketIO").GetComponent<SocketIOComponent>(); }
+        controller = GetComponent<CharacterController> ();
 		flyingBody = GetComponent<Rigidbody> ();
 		startRotation = flyingBody.rotation;
 		Reference.blowables.Add(this);
         this.name = playerName;
 
-		//Turn of the cursor while in fps
-		Cursor.visible = false;
+        // Get position and rotation from player
+        oldPosition = transform.position; currentPosition = oldPosition;
+        oldRotation = transform.rotation; currentRotation = oldRotation;
+
+        //Turn of the cursor while in fps
+        Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.Locked;
 	}
 
@@ -42,7 +52,18 @@ public class Player : MonoBehaviour, IBlowable {
 
 	void FixedUpdate () {
 		playerControl ();
-	}
+
+        // Update current position
+        currentRotation = transform.rotation; currentPosition = transform.position;
+
+        // Position & Rotation
+        if (currentPosition != oldPosition || currentRotation != oldRotation)
+        {
+            JSONObject obj = new JSONObject(Receiver.GetDictionaryPostion(gameObject));
+            socket.Emit("UPDATE_CAMERA", obj);
+            oldPosition = currentPosition; oldRotation = currentRotation;
+        }
+    }
 
 	void OnTriggerEnter(Collider collider){ //When hitting ground
 		if (collider.gameObject.name == "Terrain") {
