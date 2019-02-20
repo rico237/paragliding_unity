@@ -30,7 +30,7 @@ public class Receiver : MonoBehaviour
 
     private void OnBallMove(SocketIOEvent e)
     {
-        voile.transform.position = StringToVector3(e.data["rotation"] + "");
+        voile.transform.position = StringToVector3(e.data["position"] + "");
         voile.transform.rotation = StringToQuaternion(e.data["rotation"] + "");
     }
 

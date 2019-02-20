@@ -15,10 +15,13 @@ public class Player : MonoBehaviour, IBlowable {
 	private Quaternion startRotation;
 	public Vector3 relativeVelocityAir;
 
+    public GameObject objectToCopy;
+
+    private Rigidbody siegeBody;
+
+    Vector3 offsetSiegeFromVoile;
     Vector3 oldPosition, currentPosition;
     Quaternion oldRotation, currentRotation;
-
-    public string playerName;
 
 	private const float maxWindVelocity = 20;
 
@@ -29,15 +32,17 @@ public class Player : MonoBehaviour, IBlowable {
 		flyingBody = GetComponent<Rigidbody> ();
 		startRotation = flyingBody.rotation;
 		Reference.blowables.Add(this);
-        this.name = playerName;
+
+        siegeBody = GameObject.FindWithTag("siege").GetComponent<Rigidbody>();
+        offsetSiegeFromVoile = siegeBody.position - flyingBody.position;
 
         // Get position and rotation from player
         oldPosition = transform.position; currentPosition = oldPosition;
         oldRotation = transform.rotation; currentRotation = oldRotation;
 
         //Turn of the cursor while in fps
-        Cursor.visible = false;
-		Cursor.lockState = CursorLockMode.Locked;
+  //      Cursor.visible = false;
+		//Cursor.lockState = CursorLockMode.Locked;
 	}
 
 	void Update(){
@@ -48,7 +53,8 @@ public class Player : MonoBehaviour, IBlowable {
 		if (flying) {
 			WeightShift();
 		}
-	}
+
+    }
 
 	void FixedUpdate () {
 		playerControl ();
@@ -59,23 +65,33 @@ public class Player : MonoBehaviour, IBlowable {
         // Position & Rotation
         if (currentPosition != oldPosition || currentRotation != oldRotation)
         {
-            JSONObject obj = new JSONObject(Receiver.GetDictionaryPostion(gameObject));
+            JSONObject obj = new JSONObject(Receiver.GetDictionaryPostion(objectToCopy));
             socket.Emit("UPDATE_CAMERA", obj);
             oldPosition = currentPosition; oldRotation = currentRotation;
         }
+
+        moveSiegeBody();
+    }
+    
+
+    void moveSiegeBody()
+    {
+        GameObject siege = GameObject.FindWithTag("siege");
+        siege.transform.position = flyingBody.position + offsetSiegeFromVoile;
+
     }
 
-	void OnTriggerEnter(Collider collider){ //When hitting ground
+    void OnTriggerEnter(Collider collider){ //When hitting ground
 		if (collider.gameObject.name == "Terrain") {
 			setFlying (false);
-            Debug.Log("not flying");
+            //Debug.Log("not flying");
 		}
 	}
 
 	void OnTriggerExit(Collider collider){ //When leaving ground
 		if (collider.gameObject.name == "Terrain" && deployed) {
 			setFlying (true);
-            Debug.Log("flying");
+            //Debug.Log("flying");
         }
 	}
 	public bool getDeployed(){
@@ -104,9 +120,8 @@ public class Player : MonoBehaviour, IBlowable {
 		float startPitchVelocity = 8;
 		if (velocityAir > startPitchVelocity) {
 			return velocityAir / startPitchVelocity;
-		} else {
-			return 1;
 		}
+		return 1;
 	}
 
 	private void unDeployedControl(){ //All the code for player control
@@ -125,9 +140,11 @@ public class Player : MonoBehaviour, IBlowable {
 			
 			//Translate the direction to world space
 			moveDirection = transform.TransformDirection (moveDirection);
-			
-			//Apply the speed! 
-			moveDirection *= speed;
+
+            //siegeBody.constraints = RigidbodyConstraints.FreezeRotationZ;
+
+            //Apply the speed! 
+            moveDirection *= speed;
 			
 		} else {//In the air
 			moveDirection.y -= Reference.GRAVITY;

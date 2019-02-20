@@ -6,6 +6,7 @@ TagManager:
   tags:
   - windArea
   - playa
+  - siege
   layers:
   - Default
   - TransparentFX

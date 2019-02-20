@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 367055534082505558}
   - component: {fileID: 1716303805136288619}
-  - component: {fileID: 904819557}
   m_Layer: 0
   m_Name: SocketIO
   m_TagString: Untagged
@@ -50,18 +49,3 @@ MonoBehaviour:
   ackExpirationTime: 1800
   pingInterval: 25
   pingTimeout: 60
---- !u!114 &904819557
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 904819556}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53682946092e290489b5f50837062981, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  socket: {fileID: 0}
-  player: {fileID: 0}
-  controller: {fileID: 0}

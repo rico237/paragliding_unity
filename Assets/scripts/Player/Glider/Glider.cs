@@ -76,7 +76,7 @@ public class Glider : MonoBehaviour, IBlowable{
 		brake();
 
 		if (Input.GetAxis ("speed") > 0) { //Cheap check to see if speeding is active
-            Debug.Log("FLA MOTHERFACKA");
+            //Debug.Log("FLA MOTHERFACKA");
 			speed ();
 		}
 	}
@@ -122,7 +122,7 @@ public class Glider : MonoBehaviour, IBlowable{
 		body.AddForceAtPosition (brakeDrag*Input.GetAxis("brakeR"), brakeRightPos);
 		body.AddForceAtPosition (brakeDrag*Input.GetAxis("brakeL"), brakeLeftPos);
 
-        Debug.Log(Input.GetAxis("brakeR"));
+        //Debug.Log(Input.GetAxis("brakeR"));
 
 		//An experiment in increasing AoT when braking.
 		angleOfAttack = originAngleOfAttack + (Input.GetAxis("brakeR") + Input.GetAxis("brakeL"))*8;
