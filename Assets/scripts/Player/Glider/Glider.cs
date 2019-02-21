@@ -159,7 +159,7 @@ public class Glider : MonoBehaviour, IBlowable{
 	}
 
 	private void HideGlider(){
-		//gliderLines.SetActive (player.getDeployed ());
+		gliderLines.SetActive (player.getDeployed ());
 	}
 
 	public void AddWind(Vector3 wind){ //Temporary solution. Area should change when wind is comming from different direction
