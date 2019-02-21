@@ -14,6 +14,9 @@ public class Communication : MonoBehaviour
     public float rotationLeft = 0;
     public float rotationRight = 0;
 
+    public bool rightUp = false;
+    public bool leftUp = false;
+
     // Use this for initialization
     void Start()
     {
@@ -52,17 +55,27 @@ public class Communication : MonoBehaviour
     private void OnJoyconUpdate(SocketIOEvent evt)
     {
         Glider glider = GameObject.Find("Glider").GetComponent<Glider>();
+        Player player = GameObject.Find("Player").GetComponent<Player>();
 
         if (evt.data.GetField("type").str == "Left")
         {
             if (evt.data.GetField("isUp").str == "true")
             {
                 print("JOY CON LEFT UP");
-                rotationLeft += 0.005f * Time.deltaTime;
-                glider.applyForceLeft(rotationLeft);
-
+                leftUp = true;
+                if (player.deployed)
+                {
+                    rotationLeft += 0.005f * Time.deltaTime;
+                    glider.applyForceLeft(rotationLeft);
+                }
+                else rotationLeft = 0;
             }
-            else rotationLeft = 0;
+            else leftUp = false;
+
+            if(evt.data.GetField("pushed_buttons").str == "SHOULDER_2")
+            {
+                player.rotateLeft();
+            }
         }
 
         if (evt.data.GetField("type").str == "Right")
@@ -70,12 +83,40 @@ public class Communication : MonoBehaviour
             if (evt.data.GetField("isUp").str == "true")
             {
                 print("JOY CON RIGHT UP");
-                rotationRight += 0.005f * Time.deltaTime;
-                glider.applyForceRight(rotationRight);
+                rightUp = true;
+                if (player.deployed)
+                {
+                    rotationRight += 0.005f * Time.deltaTime;
+                    glider.applyForceRight(rotationRight);
+                }
+                else rotationRight = 0;
             }
-            else rotationRight = 0;
+            else rightUp = false;
+
+            if (evt.data.GetField("pushed_buttons").str == "SHOULDER_2")
+            {
+                player.rotateRight();
+            }
         }
-        //Debug.Log("On joycon update unity with data : " + evt.data);
+
+        if(rightUp && leftUp && !player.deployed)
+        {
+            player.deploy();
+        }
+
+        if(System.Convert.ToDouble(evt.data.GetField("accel_magnitude").str) >= 2.0 && !player.flying)// Run
+        {
+            player.move();
+        }
+
+        if (evt.data.GetField("pushed_buttons").str == "HOME")
+        {
+            Debug.Log("GO HOME IMMIGRANT");
+            player.goHome();
+        }
+
+
+        //Debug.Log("On joycon update unity with data : " + evt.data.GetField("accel_magnitude").str);
     }
 
     private void OnUserConnected(SocketIOEvent evt)
@@ -97,8 +138,6 @@ public class Communication : MonoBehaviour
     {
         //yield return new WaitForSeconds(0.5f);
         socket.Emit("USER_CONNECT");
-
-
 
         // wait 1 seconds and continue
         //yield return new WaitForSeconds(1f);

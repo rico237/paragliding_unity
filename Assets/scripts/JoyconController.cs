@@ -91,20 +91,25 @@ public class JoyconController : MonoBehaviour
         data["accel_magnitude"] = joycon.GetAccel().magnitude.ToString();
         data["orientation"] = orientation.x + "," + orientation.y + "," + orientation.z + "," + orientation.w;
         data["rotation"] = WriteVectorProperly(rotation);
+        data["pushed_buttons"] = "";
+
 
         if (joycon.GetButton(Joycon.Button.SHOULDER_1))
         {
-            data["pushed_buttons"] = "SHOULDER_1";
+            data["pushed_buttons"] += "SHOULDER_1";
         }
-        else if (joycon.GetButton(Joycon.Button.SHOULDER_2))
+
+        if (joycon.GetButton(Joycon.Button.SHOULDER_2))
         {
             data["pushed_buttons"] = "SHOULDER_2";
         }
-        else
+
+        if (joycon.GetButton(Joycon.Button.HOME))
         {
-            data["pushed_buttons"] = "";
+            data["pushed_buttons"] = "HOME";
         }
 
+ 
         if (joycon.isLeft)
         {
             //Debug.Log("left: " + orientation);
@@ -172,8 +177,6 @@ public class JoyconController : MonoBehaviour
                 rot += rotationOffset;
                 orientation = Quaternion.Euler(rot);
                 rotation = orientation.eulerAngles;
-
-
 
                 SendJoyconsData();
             }

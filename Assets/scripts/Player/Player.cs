@@ -16,6 +16,7 @@ public class Player : MonoBehaviour, IBlowable {
 	public Vector3 relativeVelocityAir;
 
     public GameObject objectToCopy;
+    public Transform home;
 
     private Rigidbody siegeBody;
 
@@ -41,7 +42,7 @@ public class Player : MonoBehaviour, IBlowable {
         oldRotation = transform.rotation; currentRotation = oldRotation;
 
         //Turn of the cursor while in fps
-  //      Cursor.visible = false;
+        //Cursor.visible = false;
 		//Cursor.lockState = CursorLockMode.Locked;
 	}
 
@@ -124,6 +125,41 @@ public class Player : MonoBehaviour, IBlowable {
 		return 1;
 	}
 
+    public void move()
+    {
+        if (controller.isGrounded)
+        {
+            //Sprint
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                speed = 12;
+            }
+            else
+            {
+                speed = 8;
+            }
+
+            //Add the user inputs. X is sideways, Z is forward/backward.
+            moveDirection = new Vector3(0, 0, 1.0f);
+
+            //Translate the direction to world space
+            moveDirection = transform.TransformDirection(moveDirection);
+
+            //siegeBody.constraints = RigidbodyConstraints.FreezeRotationZ;
+
+            //Apply the speed! 
+            moveDirection *= speed;
+
+        }
+        else
+        {//In the air
+            moveDirection.y -= Reference.GRAVITY;
+        }
+
+        //Apply movement
+        controller.Move(moveDirection * Time.deltaTime);
+    }
+
 	private void unDeployedControl(){ //All the code for player control
 		
 		//If the player is on ground and no active glider
@@ -141,8 +177,6 @@ public class Player : MonoBehaviour, IBlowable {
 			//Translate the direction to world space
 			moveDirection = transform.TransformDirection (moveDirection);
 
-            //siegeBody.constraints = RigidbodyConstraints.FreezeRotationZ;
-
             //Apply the speed! 
             moveDirection *= speed;
 			
@@ -152,16 +186,18 @@ public class Player : MonoBehaviour, IBlowable {
 		
 		//Apply movement
 		controller.Move (moveDirection * Time.deltaTime);
-		
-		//This should actually not be Space.World but Space.Paraglider, 
-		//since if in a turn, you should look horizontally relative to the glider.
-		//transform.Rotate (0, Input.GetAxis ("mouseX") * Time.deltaTime * Reference.MOUSE_SENSITIVITY, 0, Space.World);
-        //Quaternion rot = GameObject.Find("Head").GetComponent<GvrHead>().rot;
-        //Debug.Log(Input.GetAxis("mouseX"));
-        //Debug.Log(rot.x*1000);
-        //transform.Rotate(0, rot.x * 100 * Time.deltaTime * Reference.MOUSE_SENSITIVITY, 0, Space.World);
+
     }
 	
+    public void deploy()
+    {
+        if(flyingBody.velocity.y < 0.5f && flyingBody.velocity.y > -0.5f && !flying)
+        {
+            setDeployed(!deployed);
+            deployedControl();
+        }
+    }
+
 	private void deployedControl(){
 		//Walk forward
 		//This should be modified so that when the running speed is to high, force is reduced
@@ -208,4 +244,23 @@ public class Player : MonoBehaviour, IBlowable {
 		flyingBody.useGravity = deployed;
 		flyingBody.isKinematic = !deployed;
 	}
+
+    public void rotateLeft()
+    {
+        if(!flying)
+            transform.Rotate(-Vector3.up * 16 * Time.deltaTime);
+    }
+
+    public void rotateRight()
+    {
+        if(!flying)
+            transform.Rotate(Vector3.up * 16 * Time.deltaTime);
+    }
+
+    public void goHome()
+    {
+        deployed = false;
+        setDeployed(deployed);
+        transform.position = home.position;
+    }
 }
