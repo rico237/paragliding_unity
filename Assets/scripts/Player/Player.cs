@@ -67,6 +67,7 @@ public class Player : MonoBehaviour, IBlowable {
         {
             JSONObject obj = new JSONObject(Receiver.GetDictionaryPostion(objectToCopy));
             socket.Emit("UPDATE_CAMERA", obj);
+            socket.Emit("PLAYER_MOVE", obj);
             oldPosition = currentPosition; oldRotation = currentRotation;
         }
 

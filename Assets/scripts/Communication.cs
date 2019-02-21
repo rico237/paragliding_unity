@@ -42,10 +42,9 @@ public class Communication : MonoBehaviour
         StartCoroutine(ConnectToServer());
 
         socket.On("USER_CONNECTED", OnUserConnected);
-        socket.On("PLAY", OnUserPlay);
-        socket.On("MOVE", OnUserMove);
         socket.On("JOYCON_UPDATE_LEFT", OnJoyconUpdate);
         socket.On("JOYCON_UPDATE_RIGHT", OnJoyconUpdate);
+        socket.On("PLAYER_MOVE", OnPlayerMove);
 
     }
 
@@ -83,32 +82,22 @@ public class Communication : MonoBehaviour
         Debug.Log("On user connected unity with data : " + evt.data);
     }
 
-    private void OnUserPlay(SocketIOEvent evt)
+    private void OnPlayerMove(SocketIOEvent evt)
     {
-        Debug.Log("On user play unity with data : " + evt.data);
+        string position = evt.data.GetField("position").str;
+        string rotation = evt.data.GetField("rotation").str;
+
+        float speed = 1f;
+
+        player.transform.position = Vector3.Lerp(player.transform.position, Receiver.StringToVector3(position), speed * Time.deltaTime);
+        player.transform.rotation = Quaternion.Lerp(player.transform.rotation, Receiver.StringToQuaternion(rotation), speed * Time.deltaTime);
     }
 
-    private void OnUserMove(SocketIOEvent evt)
-    {
-        Debug.Log("On user move unity with data : " + evt.data);
-    }
 
     private IEnumerator ConnectToServer()
     {
-        //yield return new WaitForSeconds(0.5f);
+        yield return null;
         socket.Emit("USER_CONNECT");
-
-
-
-        // wait 1 seconds and continue
-        //yield return new WaitForSeconds(1f);
-
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data["name"] = "Rico";
-        Vector3 position = gameObject.transform.position;
-        data["position"] = position.x + "," + position.y + "," + position.z;
-        socket.Emit("PLAY", new JSONObject(data));
-
         // wait ONE FRAME and continue
         yield return null;
     }

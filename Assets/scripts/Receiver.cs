@@ -10,6 +10,8 @@ public class Receiver : MonoBehaviour
     public GameObject map;              // Terrain si jamais besoin de gerer les collisions
     public Transform voile;             // Position & rotation de la voile
 
+    private float speed = 1.0f;
+
     // Use this for initialization
     void Start()
     {
@@ -30,8 +32,8 @@ public class Receiver : MonoBehaviour
 
     private void OnBallMove(SocketIOEvent e)
     {
-        voile.transform.position = StringToVector3(e.data["position"] + "");
-        voile.transform.rotation = StringToQuaternion(e.data["rotation"] + "");
+        voile.transform.position = Vector3.Lerp(voile.transform.position, StringToVector3(e.data["position"].str), speed * Time.deltaTime);
+        voile.transform.rotation = Quaternion.Lerp(voile.transform.rotation, StringToQuaternion(e.data["rotation"].str), speed * Time.deltaTime);
     }
 
     private void OnConnect(SocketIOEvent e)

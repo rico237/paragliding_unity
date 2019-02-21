@@ -146,7 +146,7 @@ public class Glider : MonoBehaviour, IBlowable{
 
     private void pushBack(){
 		//A cheap and hopefully temporary solution for placing glider behind player when deploying
-		if (Input.GetKeyDown (KeyCode.Space) && !player.getDeployed()) {
+		if (!player.getDeployed()) {
 			body.useGravity = false;
 			body.AddRelativeForce(Vector3.back*10000);
 			body.useGravity = true;

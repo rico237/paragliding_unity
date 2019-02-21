@@ -182,6 +182,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1716303805136288619, guid: 7d0a5a414b7b7c04da44173f53308684,
+        type: 3}
+      propertyPath: url
+      value: ws://127.0.0.1:8000/socket.io/?EIO=4&transport=websocket
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d0a5a414b7b7c04da44173f53308684, type: 3}
 --- !u!1 &239516582 stripped
@@ -559,7 +564,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &419599261
 AudioListener:
   m_ObjectHideFlags: 0
@@ -1142,6 +1147,21 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6375132194080102401, guid: fed7f9f7721b33c4687d0a4bad061143,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6375132194080102401, guid: fed7f9f7721b33c4687d0a4bad061143,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6375132194080102401, guid: fed7f9f7721b33c4687d0a4bad061143,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6375132195359297267, guid: fed7f9f7721b33c4687d0a4bad061143,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1201,6 +1221,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6375132194080102409, guid: fed7f9f7721b33c4687d0a4bad061143,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6375132194080102409, guid: fed7f9f7721b33c4687d0a4bad061143,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6375132194080102409, guid: fed7f9f7721b33c4687d0a4bad061143,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6375132194080102409, guid: fed7f9f7721b33c4687d0a4bad061143,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6375132194080102409, guid: fed7f9f7721b33c4687d0a4bad061143,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fed7f9f7721b33c4687d0a4bad061143, type: 3}
@@ -1553,14 +1598,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1798964362}
   - component: {fileID: 1798964364}
-  - component: {fileID: 1798964365}
   m_Layer: 0
   m_Name: GvrMain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1798964362
 Transform:
   m_ObjectHideFlags: 0
@@ -1597,18 +1641,6 @@ MonoBehaviour:
   screenSize: 0
   viewerType: 1
   stereoScreenScale: 1
---- !u!114 &1798964365
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1798964361}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c29cf09eaf77c848ad6804dcbc8b542, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1875419866 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4171845793866516700, guid: 44ccfa065ef5ce042bd6fbfe07cfeac0,
