@@ -38,8 +38,8 @@ using WebSocketSharp.Net;
 
 namespace SocketIO
 {
-	public class SocketIOComponent : MonoBehaviour
-	{
+    public class SocketIOComponent : MonoBehaviour
+    {
 		#region Public Properties
 
 		public string url = "ws://127.0.0.1:8000/socket.io/?EIO=4&transport=websocket";
@@ -99,7 +99,16 @@ namespace SocketIO
 			sid = null;
 			packetId = 0;
 
-			ws = new WebSocket(url);
+            if (SystemInfo.deviceType == DeviceType.Desktop)
+            {
+                url = "ws://127.0.0.1:8000/socket.io/?EIO=4&transport=websocket";
+            }
+            else if (SystemInfo.deviceType == DeviceType.Handheld)
+            {
+                url = "ws://172.20.10.4:8000/socket.io/?EIO=4&transport=websocket";
+            }
+
+            ws = new WebSocket(url);
 			ws.OnOpen += OnOpen;
 			ws.OnMessage += OnMessage;
 			ws.OnError += OnError;
@@ -121,7 +130,7 @@ namespace SocketIO
 
 		public void Start()
 		{
-			if (autoConnect) { Connect(); }
+            if (autoConnect) { Connect(); }
 		}
 
 		public void Update()

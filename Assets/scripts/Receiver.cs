@@ -1,7 +1,6 @@
 using SocketIO;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using UnityEngine;
 
 public class Receiver : MonoBehaviour
@@ -22,21 +21,31 @@ public class Receiver : MonoBehaviour
         StartCoroutine(ConnectToServer());
 
         // Listen to events
-        socket.On("UPDATE_CAMERA", OnBallMove);
+        socket.On("UPDATE_CAMERA", OnUpdateMove);
         socket.On("USER_CONNECTED", OnConnect);
     }
 
     #region Listening
 
-    private void OnBallMove(SocketIOEvent e)
+    private void OnUpdateMove(SocketIOEvent evt)
     {
-        voile.transform.position = StringToVector3(e.data["position"] + "");
-        voile.transform.rotation = StringToQuaternion(e.data["rotation"] + "");
+        if (SystemInfo.deviceType == DeviceType.Handheld)
+        {
+            float speed = 1f * Time.deltaTime;
+
+            //Debug.Log("On user move unity with data : " + evt.data);
+
+            Vector3 position = StringToVector3(evt.data.GetField("position").str);
+            Quaternion rotation = StringToQuaternion(evt.data.GetField("rotation").str);
+
+            voile.transform.position = Vector3.Lerp(voile.transform.position, position, speed);
+            voile.transform.rotation = Quaternion.Lerp(voile.transform.rotation, rotation, speed);
+        }
     }
 
     private void OnConnect(SocketIOEvent e)
     {
-        Debug.Log("User connect with id : "+ e.data["id"]);
+        Debug.Log("User connect with id : "+ e.data["name"]);
     }
 
     #endregion
@@ -48,8 +57,24 @@ public class Receiver : MonoBehaviour
         // wait ONE FRAME and continue
         yield return null;
 
-        // Emit connect to server
-        socket.Emit("USER_CONNECT");
+        Dictionary<string, string> data = new Dictionary<string, string>();
+
+        if (SystemInfo.deviceType == DeviceType.Handheld)
+        {
+            data["name"] = "Mobile/tablette";
+        }
+        else if (SystemInfo.deviceType == DeviceType.Desktop)
+        {
+            data["name"] = "PC";
+        }
+        else
+        {
+            data["name"] = "Other";
+        }
+
+        //Vector3 position = gameObject.transform.position;
+        //data["position"] = position.x + "," + position.y + "," + position.z;
+        socket.Emit("USER_CONNECT", new JSONObject(data));
 
         // wait ONE FRAME and continue
         yield return null;

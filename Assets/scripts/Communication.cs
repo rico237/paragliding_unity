@@ -1,13 +1,11 @@
 ﻿using SocketIO;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 public class Communication : MonoBehaviour
 {
     public SocketIOComponent socket;
-    public GameObject player;
     public UnityEngine.CharacterController controller;
     private JoyconManager joyconManager;
     List<Joycon> joycons;
@@ -20,10 +18,10 @@ public class Communication : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        joyconManager = JoyconManager.Instance;
 
-        // get the public Joycon array attached to the JoyconManager in scene
-        joycons = JoyconManager.Instance.j;
+
+
+
 
         if (socket == null)
         {
@@ -35,20 +33,20 @@ public class Communication : MonoBehaviour
             Debug.Log("controller null, Trying to assign it");
             controller = GameObject.FindWithTag("Player").GetComponent<UnityEngine.CharacterController>();
         }
-        if (player == null)
-        {
-            Debug.Log("player null, Trying to assign it");
-            player = GameObject.FindWithTag("Player");
-        }
+
 
         // Start server
         StartCoroutine(ConnectToServer());
 
         socket.On("USER_CONNECTED", OnUserConnected);
-        socket.On("PLAY", OnUserPlay);
-        socket.On("MOVE", OnUserMove);
+        socket.On("PLAYER_MOVE", OnUserMove);
         socket.On("JOYCON_UPDATE_LEFT", OnJoyconUpdate);
         socket.On("JOYCON_UPDATE_RIGHT", OnJoyconUpdate);
+
+        joyconManager = JoyconManager.Instance;
+
+        // get the public Joycon array attached to the JoyconManager in scene
+        joycons = JoyconManager.Instance.j;
 
     }
 
@@ -61,7 +59,7 @@ public class Communication : MonoBehaviour
         {
             if (evt.data.GetField("isUp").str == "true")
             {
-                print("JOY CON LEFT UP");
+                //print("JOY CON LEFT UP");
                 leftUp = true;
                 if (player.deployed)
                 {
@@ -82,7 +80,7 @@ public class Communication : MonoBehaviour
         {
             if (evt.data.GetField("isUp").str == "true")
             {
-                print("JOY CON RIGHT UP");
+                //print("JOY CON RIGHT UP");
                 rightUp = true;
                 if (player.deployed)
                 {
@@ -111,7 +109,7 @@ public class Communication : MonoBehaviour
 
         if (evt.data.GetField("pushed_buttons").str == "HOME")
         {
-            Debug.Log("GO HOME IMMIGRANT");
+            //Debug.Log("GO HOME IMMIGRANT");
             player.goHome();
         }
 
@@ -121,39 +119,49 @@ public class Communication : MonoBehaviour
 
     private void OnUserConnected(SocketIOEvent evt)
     {
-        Debug.Log("On user connected unity with data : " + evt.data);
-    }
-
-    private void OnUserPlay(SocketIOEvent evt)
-    {
-        Debug.Log("On user play unity with data : " + evt.data);
+        Debug.Log("On user connected unity with data : " + evt.data.GetField("name").str);
     }
 
     private void OnUserMove(SocketIOEvent evt)
     {
-        Debug.Log("On user move unity with data : " + evt.data);
+        if (SystemInfo.deviceType == DeviceType.Handheld)
+        {
+            //float speed = 1f * Time.deltaTime;
+            float speed = 1f;
+
+            Player player = GameObject.Find("Player").GetComponent<Player>();
+            Vector3 position = Receiver.StringToVector3(evt.data.GetField("position").str);
+            Quaternion rotation = Receiver.StringToQuaternion(evt.data.GetField("rotation").str);
+
+            player.transform.position = Vector3.Lerp(player.transform.position, position, speed);
+            player.transform.rotation = Quaternion.Lerp(player.transform.rotation, rotation, speed);
+        }
     }
 
     private IEnumerator ConnectToServer()
     {
-        //yield return new WaitForSeconds(0.5f);
-        socket.Emit("USER_CONNECT");
-
-        // wait 1 seconds and continue
-        //yield return new WaitForSeconds(1f);
 
         Dictionary<string, string> data = new Dictionary<string, string>();
-        data["name"] = "Rico";
-        Vector3 position = gameObject.transform.position;
-        data["position"] = position.x + "," + position.y + "," + position.z;
-        socket.Emit("PLAY", new JSONObject(data));
+
+        if (SystemInfo.deviceType == DeviceType.Handheld)
+        {
+            data["name"] = "Mobile/tablette";
+        } 
+        else if (SystemInfo.deviceType == DeviceType.Desktop)
+        {
+            data["name"] = "PC";
+        }
+        else
+        {
+            data["name"] = "Other";
+        }
+
+        //Vector3 position = gameObject.transform.position;
+        //data["position"] = position.x + "," + position.y + "," + position.z;
+        socket.Emit("USER_CONNECT", new JSONObject(data));
 
         // wait ONE FRAME and continue
         yield return null;
     }
 
-   
-
-    // Not used
-    private void Update() { }
 }

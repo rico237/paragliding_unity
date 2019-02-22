@@ -37,6 +37,9 @@ public class Player : MonoBehaviour, IBlowable {
         siegeBody = GameObject.FindWithTag("siege").GetComponent<Rigidbody>();
         offsetSiegeFromVoile = siegeBody.position - flyingBody.position;
 
+        if (home == null)
+            home = gameObject.transform;
+
         // Get position and rotation from player
         oldPosition = transform.position; currentPosition = oldPosition;
         oldRotation = transform.rotation; currentRotation = oldRotation;
@@ -47,9 +50,9 @@ public class Player : MonoBehaviour, IBlowable {
 	}
 
 	void Update(){
-		if (Input.GetKey (KeyCode.Escape)) {
-			Application.Quit ();
-		}
+		//if (Input.GetKey (KeyCode.Escape)) {
+		//	Application.Quit ();
+		//}
 
 		if (flying) {
 			WeightShift();
@@ -68,10 +71,11 @@ public class Player : MonoBehaviour, IBlowable {
         {
             JSONObject obj = new JSONObject(Receiver.GetDictionaryPostion(objectToCopy));
             socket.Emit("UPDATE_CAMERA", obj);
+            socket.Emit("PLAYER_MOVE", obj);
             oldPosition = currentPosition; oldRotation = currentRotation;
         }
 
-        moveSiegeBody();
+        //moveSiegeBody();
     }
     
 
@@ -208,7 +212,7 @@ public class Player : MonoBehaviour, IBlowable {
 		if (!flying) {
 			//Listen for deploy input
 			if (Input.GetKeyUp (KeyCode.Space) && flyingBody.velocity.y < 0.5f && flyingBody.velocity.y > -0.5f) { //Deploy the glider. Kind of lags. 
-                Debug.Log("DEPLOY");
+                //Debug.Log("DEPLOY");
 				setDeployed(!deployed);
 			}
 			if (deployed) {
