@@ -80,6 +80,11 @@ public class Receiver : MonoBehaviour
         yield return null;
     }
 
+    public void createWind()
+    {
+        socket.Emit("WIND");
+    }
+
     #endregion
 
     #region JSON_Functions

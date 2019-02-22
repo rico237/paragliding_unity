@@ -4,22 +4,32 @@ using UnityEngine;
 
 public class HWCameraChange : MonoBehaviour
 {
-    Camera[] listOfCameras;
     int camPos = 0;
+    public List<GameObject> listOfCameras;
+    public int current = 0;
     // Start is called before the first frame update
     void Start()
     {
-        listOfCameras = GetComponents<Camera>();    
+        //listOfCameras = GameObject.Find("CameraList"):
+         foreach (Transform child in GameObject.Find("CamerasList").transform)
+         {
+            listOfCameras.Add(child.gameObject);
+         }
+
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
-    void switchCamera()
+    public void switchCamera()
     {
+        listOfCameras[current].SetActive(false);
+        if (current >= listOfCameras.Count-1)
+        {
+            current = 0;
+        }
+        else current++;
+        listOfCameras[current % 5].SetActive(true);
+
+
 
     }
 }
