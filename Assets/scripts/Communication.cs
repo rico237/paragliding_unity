@@ -43,10 +43,10 @@ public class Communication : MonoBehaviour
         socket.On("JOYCON_UPDATE_LEFT", OnJoyconUpdate);
         socket.On("JOYCON_UPDATE_RIGHT", OnJoyconUpdate);
 
-        joyconManager = JoyconManager.Instance;
+        //joyconManager = JoyconManager.Instance;
 
         // get the public Joycon array attached to the JoyconManager in scene
-        joycons = JoyconManager.Instance.j;
+        //joycons = JoyconManager.Instance.j;
 
     }
 
