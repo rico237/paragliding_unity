@@ -105,7 +105,7 @@ namespace SocketIO
             }
             else if (SystemInfo.deviceType == DeviceType.Handheld)
             {
-                url = "ws://172.20.10.4:8000/socket.io/?EIO=4&transport=websocket";
+                url = "ws://192.168.43.136:8000/socket.io/?EIO=4&transport=websocket";
             }
 
             ws = new WebSocket(url);
