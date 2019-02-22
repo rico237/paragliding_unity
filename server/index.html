@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+  <title>Switch test</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    button { width: 100%; height: 100%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+  </style>
+</head>
+<body>
+  <button id="switch_button">SWITCH</button>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    let socket = io();
+    document.getElementById("switch_button").addEventListener("click", () => {
+      socket.emit('switch_wemo');
+    });
+  </script>
+</body>
+</html>
