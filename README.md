@@ -15,6 +15,7 @@ ParaglidingSimulator est une simulation de parapente. Notre solution utilise un 
   * un casque de VR
   * une paire de manette Joycon de la nintendo switch
   * une prise wemo (https://www.belkin.com/fr/p/P-F7C029/)
+  * un ventilateur
   
 * Mise en place :
 
