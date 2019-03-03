@@ -4,7 +4,6 @@
 * WOLBER Herrick
 * XIAOHAN Huang 
 ## Description du projet
-
 ParaglidingSimulator est une simulation de parapente. Notre solution utilise un casque VR pour renforcer l'immersion dans le monde. On utilise les manettes de la Nintendo Switch (Joycon) pour simuler les poignées du parapente et rendre l’expérience encore plus réaliste. Notre projet intègre une scène de visualisation qui permet à d'autres personnes de visualiser l'évolution du joueur dans le jeu. De plus, dans un soucis d’immersion notre solution permet de contrôler des ventilateurs pour simuler les courants aériens.
 
 ## Déploiment de la solution
@@ -18,8 +17,11 @@ ParaglidingSimulator est une simulation de parapente. Notre solution utilise un 
   * un ventilateur
   
 * Mise en place :
- * Lancer le serveur sur le pc, pour cela allez dans le répertoir "serveur" ouvrir un terminal et tapez "node index.js"
-
+  * Lancer le serveur sur le pc, pour cela allez dans le répertoir "serveur" ouvrir un terminal et tapez "node index.js"
+  * Ouvrir le projet avec Unity version 2018.3.0f2, allez dans Project->Assets->Scenes et double cliquer sur PC_app
+  * Connecter en bluetooth les joycon à votre PC
+  * Installer les apk pour les deux dispositifs respectivement vr_app.apk pour le smartphone et tablette_app.apk pour la tablette, les deux apks se trouvent à la racine du projet
+  * Il ne reste plus qu'a lancer les deux applications
 
 ## Vidéo de présentation
 
