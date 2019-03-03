@@ -18,6 +18,7 @@ ParaglidingSimulator est une simulation de parapente. Notre solution utilise un 
   * un ventilateur
   
 * Mise en place :
+ * Lancer le serveur sur le pc, pour cela allez dans le répertoir "serveur" ouvrir un terminal et tapez "node index.js"
 
 
 ## Vidéo de présentation
