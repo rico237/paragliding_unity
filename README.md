@@ -10,7 +10,7 @@ ParaglidingSimulator est une simulation de parapente. Notre solution utilise un 
 * Materiel nécessaire  :
   * un smartphone sous android 7.0
   * une tablette sous android 7.0
-  * un pc (pour héberger le serveur)
+  * un pc (pour héberger le serveur  & se connecter aux joycons)
   * un casque de VR
   * une paire de manette Joycon de la nintendo switch
   * une prise wemo (https://www.belkin.com/fr/p/P-F7C029/)
